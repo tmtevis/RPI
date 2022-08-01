@@ -1,0 +1,46 @@
+Waveshare TFT
+VCC = 5V or 3.3V supply. (NodeMCU 3V3 pin will not properly power LED)
+GND = GND
+TFT DIN = NodeMCU D7 (SPI data)
+TFT CLK = NodeMCU D5 (SPI clock)
+TFT CS = NodeMCU D8 (Chip Select, LOW to enable display to receive data)
+TFT DC = NodeMCU D3 (Data/Command. When LOW the byte is seen as a command such as text colour selection)
+TFT RST = NodeMCU D4 (Reset, works OK when connected to MCU RST)
+TFT LED = Can be left disconnected or to VCC, ground to turn off LED, PWM to dim it.
+
+In a sketch the pins are defined:
+
+#define D3 0
+#define D4 2
+#define D5 14
+#define D7 13
+#define D8 15
+#define TFT_CS D8
+#define TFT_RST D4
+#define TFT_DC D3
+#define TFT_SCLK D5
+#define TFT_MOSI D7
+
+And assuming you use the Adafruit_ST77355 library you also need:
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST); // defines the comms object
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+My starting point in getting the display working was the aforementioned Adafruit_ST77355 library.There was a green tab on my display's protector film, but the display initialisation in void setup() that works for me is:
+
+tft.initR(INITR_BLACKTAB);
+
+Other initialisations produced weird effects such as reversed colours.
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+In my first trials the display showed 'noise bands' at top and right of screen, those being areas my sketches were not writing to. After a certain amount of head-scratching and scouring the internet I learned the ST7735 display buffer is actually 132 x 162 and I added new lines 414 and 415 to Adafruit_ST7735.cpp as follows:
+colstart = 2; // shift display right
+rowstart = 1; // shift display down
+
+and that fixed the problem.
+-------------------------------------------------------------------------------------------------------------------------------
+The User Manual - available as a pdf from the Waveshare site - says the display supports up to 18 bit 256k colour. I wouldn't even want to think about coding for that because 18 is not a byte multiple, and I treat the display as 16 bit (RRRRRGGGGGGBBBBB) 65k colour, which works for me. If any extant libraries provide functions to load such images into the display from memory (Adafruit have a routine to load from SD card) then I haven't found them, and the images you see in my video were loaded by a simple column/row loop that reads 20480 (128 x 160) 16 bit pixel values from a C array using the pgm_read_word macro and writes them to the screen with tft.drawPixel from the Adafruit library .
+
+Image quality is very good, far better than I've been able to capture with my phone camera due to such things as the display refresh strobing with the camera. If you order this display I don't think you'll be disappointed, and certainly I'm happy to rate it as 5 star.
