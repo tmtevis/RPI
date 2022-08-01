@@ -1,0 +1,118 @@
+#### GENERAL TERMINAL COMMANDS ####
+
+pinout // shows graphical version of pinout
+
+
+sudo apt-get // installs, upgrades packages
+sudo apt-get update
+sudo apt-get upgrade
+apt-cache search gimp // search that yields all packages (searches name and descriptor)
+apt-cache search -n gimp // only searches name (still may give a lot of results)
+apt-cache search -n gimp | less // read by page
+
+sudo apt-get install gimp // installs gimp (can name multiple programs at once)
+
+(add --dry-run to see what would be done w/o writing to HD)
+
+sudo apt-get remove gimp // remove gimp
+sudo apt-get purge gimp // deletes program and configs
+
+
+##### KILL PROCESS ####
+
+
+ps -aer | grep python // see what scripts are running
+
+"pi	1539  0.7 ..... etc"
+
+kill 1539 // kills selected process
+
+
+
+#### SEND EMAIL ####
+
+echo "Hello" | mail -s "TEST" awildtylerappears@gmail.com // sends email with subject: TEST body: Hello
+
+
+
+#### SEND TEXT ####
+
+echo "INTRUDER DETECTED" | mail -s "ALERT" +18143845117@tmomail.net  // sends text from my email (wildtyler@gmail) that says "ALERT / INTRUDER DETECTED"
+
+T-Mobile = @tmomail.net
+ATT = @mms.att.net
+Verizon = @vtext.com
+Sprint = @pm.sprint.com
+
+
+
+
+#### MPG123 COMMANDS ####
+
+mpg123 file.mp3  //play an mp3
+
+
+
+
+
+#### FSWEBCAM commands ####
+
+fswebcam -r 640x480 output.jpeg // takes a single pic. resolution customizable
+
+fswebcam -d v4L2:/dev/video0 --list-controls  // see camera controls
+
+
+
+
+#### GPIO commands (as root) ####
+
+echo "23" > /sys/class/gpio/export
+echo "in" > /sys/class/gpio/gpio23/direction  // set up pin to read as input
+
+cat /sys/class/gpio/gpio24/value  // see value of pin
+
+cd /sys/class/gpio/  // view gpios listed in export/unexport
+ls
+
+echo "23" > /sys/class/gpio/unexport  // release a pin afterwards
+
+
+
+#### Python GPIO tester ####
+
+
+import RPi.GPIO as GPIO
+from time import sleep     # this lets us have a time delay (see line 12)
+GPIO.setmode(GPIO.BCM)     # set up BCM GPIO numbering
+GPIO.setup(24, GPIO.IN)    # set GPIO 25 as input
+
+try:
+    while True:            # this will carry on until you hit CTRL+C
+        if GPIO.input(24): # if port 25 == 1
+            print "HIGH"
+        else:
+            print "LOW"
+        sleep(1)         # wait 1 second
+
+except KeyboardInterrupt:
+    GPIO.cleanup()         # clean up after yourself
+
+
+
+
+
+#### NOTES ####
+
+in start-up:
+pulseaudio --start // may be broken, but start it
+
+SECURITY.py
+
+on.py // connect bluetooth automatically
+
+
+
+bareFTP for transferring files
+
+
+
